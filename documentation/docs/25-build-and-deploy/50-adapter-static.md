@@ -111,12 +111,11 @@ export default config;
 You can use GitHub actions to automatically deploy your site to GitHub Pages when you make a change. Here's an example workflow:
 
 ```yaml
-### file: .github/workflows/deploy.yml
 name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: 'main'
+    branches: [ "main" ]
 
 jobs:
   build_site:
@@ -125,16 +124,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # If you're using pnpm, add this step then change the commands and cache key below to use `pnpm`
-      # - name: Install pnpm
-      #   uses: pnpm/action-setup@v3
-      #   with:
-      #     version: 8
-
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
           cache: npm
 
       - name: Install dependencies
@@ -142,9 +135,8 @@ jobs:
 
       - name: build
         env:
-          BASE_PATH: '/${{ github.event.repository.name }}'
-        run: |
-          npm run build
+          BASE_PATH: "/${{ github.event.repository.name }}"
+        run: npm run build
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v3
@@ -155,7 +147,6 @@ jobs:
   deploy:
     needs: build_site
     runs-on: ubuntu-latest
-
     permissions:
       pages: write
       id-token: write
